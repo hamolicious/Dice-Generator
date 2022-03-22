@@ -1,13 +1,13 @@
 FROM ruby:3.0
 
-# throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
-
 WORKDIR /lib
 
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile Gemfile ./
 RUN bundle install
 
 COPY . .
 
-CMD ["app.rb"]
+ENV PORT=4567
+EXPOSE 4567
+
+CMD ["ruby", "lib/app.rb", "-o", "0.0.0.0"]
