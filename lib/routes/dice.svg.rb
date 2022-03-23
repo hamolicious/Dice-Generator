@@ -10,10 +10,7 @@ def is_cached?(params)
     return File.exist?(digest_params(params))
 end
 
-# /dice
-get generate_route(__FILE__) do
-    content_type 'image/svg+xml'
-
+def generate_die(params)
     @die_fill = '#' << get_param_str(params, 'diefill', '0F0F0F')
     @circle_fill = '#' << get_param_str(params, 'circlefill', 'F0F0F0')
 
@@ -50,10 +47,19 @@ get generate_route(__FILE__) do
     </svg>
     ]
 
+    return string
+end
+
+
+# /dice
+get generate_route(__FILE__) do
+    content_type 'image/svg+xml'
+
     path = File.join(get_assets_path(), "#{digest_params(params)}.svg")
     if !is_cached?(params)
+        svg = generate_die(params)
         file = File.open(path, 'w')
-        file.write(string)
+        file.write(svg)
     end
 
     file.close()
