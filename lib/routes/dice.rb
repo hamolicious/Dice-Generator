@@ -25,5 +25,5 @@ get generate_route(__FILE__) do
     @bot_left =  [4, 5, 6].include?(@dice_roll)       ? @circle_fill : @die_fill
     @bot_right = [2, 3, 4, 5, 6].include?(@dice_roll) ? @circle_fill : @die_fill
 
-    erb :dicesvg
+    erb :dice
 end
