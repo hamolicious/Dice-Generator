@@ -1,4 +1,5 @@
 run.sh
+lib/assets/**
 
 *.gem
 *.rbc
