@@ -13,7 +13,18 @@ set :views, Proc.new { File.join(__dir__, 'views') }
 set :public_folder, get_assets_path()
 
 # import routes
-require_relative './routes/dice.svg'
-require_relative './routes/docs/dice.svg'
+def get_all_endpoints(path, files=nil)
+    files = [] if files == nil
+    check = Dir.glob(File.join(path, '/**'))
+    check.each { |f|
+        files.push(f) if File.file?(f)
+        get_all_endpoints(f, files=files) if !File.file?(f)
+    }
+    return files
+
+end
+get_all_endpoints('./routes/').each { |req|
+    require_relative req
+}
 
 
