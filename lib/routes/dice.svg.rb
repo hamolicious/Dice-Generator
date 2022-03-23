@@ -1,5 +1,5 @@
 require 'sinatra'
-require_relative '.././utils'
+require_relative File.join(Dir.pwd, 'utils')
 require 'digest'
 
 def digest_params(params)

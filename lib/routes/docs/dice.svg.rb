@@ -1,5 +1,5 @@
 require 'sinatra'
-require_relative '../.././utils'
+require_relative File.join(Dir.pwd, 'utils')
 
 get generate_route(__FILE__) do
     erb :doc_dice
