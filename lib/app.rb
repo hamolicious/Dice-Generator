@@ -21,10 +21,8 @@ def get_all_endpoints(path, files=nil)
         get_all_endpoints(f, files=files) if !File.file?(f)
     }
     return files
-
 end
 get_all_endpoints('./routes/').each { |req|
     require_relative req
 }
-
 

@@ -1,2 +1,121 @@
 <div>
+	<table>
+		<tr>
+			<td><img src="/dice.svg" alt="Generated Dice Will Show Here!" id="dice-image"></td>
+		</tr>
+		<tr>
+			<td><span>Die Fill Color</span></td>
+			<td><input oninput="setParamColor('diefill');insertLink()" value="#0F0F0F" id="diefill" type="color"></td>
+		</tr>
+		<tr>
+			<td><span>Circle Fill Color</span></td>
+			<td><input oninput="setParamColor('circlefill');insertLink()" value="#F0F0F0" id="circlefill" type="color"></td>
+		</tr>
+		<tr>
+			<td><span>Size</span></td>
+			<td><input oninput="setParam('size');insertLink()" value="300" id="size" type="number"></td>
+		</tr>
+		<tr>
+			<td><span>Circle Size</span></td>
+			<td><input oninput="setParam('circlerad');insertLink()" value="85" id="circlerad" type="number"></td>
+			<td><input oninput="setParam('circlerad-slider');insertLink()" type="range" min="1" max="100" value="85" class="slider" id="circlerad-slider"></td>
+		</tr>
+		<tr>
+			<td><span>Corner Rad</span></td>
+			<td><input oninput="setParam('cornerrad');insertLink()" value="25" id="cornerrad" type="number"></td>
+			<td><input oninput="setParam('cornerrad-slider');insertLink()" type="range" min="1" max="100" value="85" class="slider" id="cornerrad-slider"></td>
+		</tr>
+		<tr>
+			<td><span>Display Number</span></td>
+			<td><input oninput="setParam('num');insertLink()" value="5" id="num" type="number"></td>
+			<td><input oninput="setParam('num-slider');insertLink()" type="range" min="1" max="6" value="5" class="slider" id="num-slider"></td>
+		</tr>
+		<tr>
+			<td>
+			<button onclick="copyToClipboard()">
+				<span>Link Generated: </span>
+				<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+					<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+					<rect x="8" y="8" width="12" height="12" rx="2"></rect>
+					<path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+				</svg>
+			</button>
+			</td>
+		</tr>
+	</table>
 </div>
+
+<script>
+	parameters = {
+		"diefill": "0F0F0F",
+		"circlefill": "F0F0F0",
+		"size": 300,
+		"cornerrad": 25,
+		"num": 3,
+		"circlerad": 85,
+	}
+	setParamColor("diefill");
+	setParamColor("circlefill");
+	setParam("size");
+	setParam("cornerrad");
+	setParam("num");
+	setParam("circlerad");
+	insertLink();
+
+	// return a promise
+	function copyToClipboard() {
+		textToCopy = buildLink(parameters)
+
+		// navigator clipboard api needs a secure context (https)
+		if (navigator.clipboard && window.isSecureContext) {
+			// navigator clipboard api method'
+			return navigator.clipboard.writeText(textToCopy);
+		} else {
+			// text area method
+			let textArea = document.createElement("textarea");
+			textArea.value = textToCopy;
+			// make the textarea out of viewport
+			textArea.style.position = "fixed";
+			textArea.style.left = "-999999px";
+			textArea.style.top = "-999999px";
+			document.body.appendChild(textArea);
+			textArea.focus();
+			textArea.select();
+			return new Promise((res, rej) => {
+				// here the magic happens
+				document.execCommand('copy') ? res() : rej();
+				textArea.remove();
+			});
+		}
+	}
+
+	function setParam(key) {
+		parameters[key.replace('-slider', '')] = document.getElementById(key).value.replace('#', '');
+		if (key.includes('-slider') && !key.includes('fill')) {
+			document.getElementById(key.replace('-slider', '')).value = document.getElementById(key).value;
+		} else {
+			document.getElementById(key + '-slider').value = document.getElementById(key).value;
+		}
+	}
+
+	function setParamColor(key) {
+		parameters[key] = document.getElementById(key).value.replace('#', '');
+	}
+
+	function buildLink(params) {
+		var link = "/dice.svg?";
+		for (var key in params) {
+			link += key + "=" + params[key] + "&";
+		}
+		return link;
+	}
+
+	function insertLink() {
+		var link = buildLink(parameters);
+		document.getElementById("dice-image").src = link;
+	}
+
+</script>
+
+<style>
+</style>
